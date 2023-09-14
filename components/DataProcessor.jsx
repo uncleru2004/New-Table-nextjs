@@ -37,6 +37,15 @@ export default function DataProcessor() {
   function onClick(event) {
     const tr = event.target.closest("tr");
 
+    if (event.target.id === "btnCloseInfo") {
+      setOpenDialogUserID(null);
+      setOpenDialogPosts(null);
+    }
+
+    if (event.target.id === "btnClosePosts") {
+      setOpenDialogPosts(null);
+    }
+
     if (event.target.id === "delUser") {
       setData(data.filter((item) => item.id != tr.id));
       setOpenDialogUserID(null);
@@ -73,13 +82,7 @@ export default function DataProcessor() {
         <ItemsFetcher onLoadCallback={setInfo} value={openDialogUserID}>
           <Dialog class_name="popupInfo">
             <RenderInfo info={info} />
-            <button
-              className="buttonClose"
-              onClick={() => {
-                setOpenDialogUserID(null);
-                setOpenDialogPosts(null);
-              }}
-            >
+            <button id="btnCloseInfo" className="buttonClose">
               ❌
             </button>
             <button id="getPosts">Post</button>
@@ -93,12 +96,7 @@ export default function DataProcessor() {
             {posts.map((post) => (
               <RenderPosts key={post.id} post={post} />
             ))}
-            <button
-              className="buttonClose"
-              onClick={() => {
-                setOpenDialogPosts(null);
-              }}
-            >
+            <button id="btnClosePosts" className="buttonClose">
               ❌
             </button>
           </Dialog>
