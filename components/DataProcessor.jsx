@@ -14,8 +14,12 @@ export default function DataProcessor() {
     [info, setInfo] = useState(null),
     [posts, setPosts] = useState([]),
     [openDialogUserID, setOpenDialogUserID] = useState(null),
-    [openDialogPosts, setOpenDialogPosts] = useState(null);
-
+    [openDialogPosts, setOpenDialogPosts] = useState(null),
+    [editedID, setEditedID] = useState(null),
+    [values, setValues] = useState(columns.map(() => "-"));
+  console.log(values);
+  //console.log(data[+editedID])
+  console.log(editedID);
   function filterObjects(el) {
     if (!filterStr) return true;
     return columns
@@ -65,17 +69,88 @@ export default function DataProcessor() {
       setOpenDialogUserID(null);
       setOpenDialogPosts(null);
     }
+    if (event.target.id === "editUser") {
+      setEditedID(tr.id);
+      const index = data.findIndex((obj) => String(obj.id) === String(tr.id));
+      setValues(
+        columns.map(({ setVal, getVal }) =>
+          setVal ? getVal(data[index]) : "-"
+        )
+      );
+    }
+    if (event.target.id === "cancel") {
+      setEditedID(null);
+    }
+    if (event.target.id === "ok") {
+      if (editedID) {
+        const ind = data.findIndex(
+          (obj) => String(obj.id) === String(editedID)
+        );
+        const newObj = data[ind];
+        columns.forEach(({ setVal }, index) =>
+          Object.assign(newObj, setVal?.(values[index]))
+        );
+        setData((old) => old.with(ind, newObj));
+      } else {
+        const newObj = { id: Math.random(), address: {} };
+        columns.forEach(({ setVal }, index) =>
+          Object.assign(newObj, setVal?.(values[index]))
+        );
+        setData(data.concat(newObj));
+      }
+      setEditedID(null);
+      setValues(columns.map(() => "-"));
+    }
+  }
+
+  function Form() {
+    return (
+      <tr>
+        {columns.map(({ title, getVal, setVal }, index) =>
+          title === "del" ? (
+            <td>
+              <button id="ok">🆗</button>
+            </td>
+          ) : title === "ed" ? (
+            <td>
+              <button id="cancel">🗙</button>
+            </td>
+          ) : (
+            <td key={title}>
+              {setVal ? (
+                <input
+                  value={values[index]}
+                  onInput={(event) =>
+                    setValues((old) => old.with(index, event.target.value))
+                  }
+                />
+              ) : (
+                "..."
+              )}
+            </td>
+          )
+        )}
+      </tr>
+    );
   }
 
   return (
     <div onClick={() => onClick(event)}>
-      <input
-        value={filterStr}
-        placeholder="Поиск..."
-        onInput={(event) => setFilterStr(event.target.value)}
-      />
+      <div className="inputHolder">
+        <input
+          value={filterStr}
+          placeholder="Поиск..."
+          onInput={(event) => setFilterStr(event.target.value)}
+        />
+      </div>
       <ItemsFetcher onLoadCallback={setData}>
-        <Table data={data?.filter(filterObjects)} columns={columns} />
+        <Table
+          data={data?.filter(filterObjects)}
+          columns={columns}
+          editedID={editedID}
+        >
+          <Form />
+        </Table>
       </ItemsFetcher>
 
       {openDialogUserID && (

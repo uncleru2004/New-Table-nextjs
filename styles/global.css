@@ -16,12 +16,16 @@ button {
   cursor: pointer;
 }
 
+.inputHolder {
+  width: 400px;
+}
+
 input {
   box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.2);
-  margin: 10px;
+  margin: 10px 0;
   height: 40px;
   font-size: 28px;
-  width: 400px;
+  width: 100%;
   border-radius: 12px;
   border: 1px solid #c3c7ca;
   color: #34444f;
@@ -51,3 +55,4 @@ button:hover {
   background-color: #34444f;
   color: #c3c7ca;
 }
+

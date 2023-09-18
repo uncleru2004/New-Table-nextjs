@@ -4,7 +4,7 @@ export default function RenderUser({ user }) {
   //console.log("renderUser");
 
   return (
-    <tr id={user.id} data-id="tr">
+    <tr key={user.id} id={user.id} data-id="tr">
       {columns.map(({ title, getVal }) => (
         <td key={title}>{getVal(user)}</td>
       ))}

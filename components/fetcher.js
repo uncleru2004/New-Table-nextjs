@@ -1,6 +1,7 @@
 export const columns = [
   { title: "ID", getVal: (obj) => obj.id },
-  { title: "Name", getVal: (obj) => obj.name },
+
+  { title: "Name", getVal: (obj) => obj.name, setVal: (name) => ({ name }) },
   {
     title: "Email",
     getVal: ({ email }) => <a href={"mailto:" + email}>{email}</a>,
@@ -13,14 +14,15 @@ export const columns = [
   {
     title: "Phone",
     getVal: ({ phone }) => <a href={"tel:" + phone}>{phone}</a>,
+    
   },
   {
-    title: "",
-    getVal: ({ id }) => (
-      <button data-id={id} id="delUser">
-        ❌
-      </button>
-    ),
+    title: "del",
+    getVal: () => <button id="delUser">❌</button>,
+  },
+  {
+    title: "ed",
+    getVal: () => <button id="editUser">✏️</button>,
   },
 ];
 
