@@ -77,9 +77,12 @@ export default function DataProcessor() {
           setVal ? getVal(data[index]) : "-"
         )
       );
+      setOpenDialogUserID(null);
+      setOpenDialogPosts(null);
     }
     if (event.target.id === "cancel") {
       setEditedID(null);
+      setValues(columns.map(() => "-"));
     }
     if (event.target.id === "ok") {
       if (editedID) {
@@ -92,7 +95,10 @@ export default function DataProcessor() {
         );
         setData((old) => old.with(ind, newObj));
       } else {
-        const newObj = { id: Math.random(), address: {} };
+        const newObj = {
+          id: Math.max(...data.map((item) => +item.id)) + 1,
+          address: {},
+        };
         columns.forEach(({ setVal }, index) =>
           Object.assign(newObj, setVal?.(values[index]))
         );
@@ -106,13 +112,13 @@ export default function DataProcessor() {
   function Form() {
     return (
       <tr>
-        {columns.map(({ title, getVal, setVal }, index) =>
+        {columns.map(({ title, setVal }, index) =>
           title === "del" ? (
-            <td>
+            <td key={title}>
               <button id="ok">🆗</button>
             </td>
           ) : title === "ed" ? (
-            <td>
+            <td key={title}>
               <button id="cancel">🗙</button>
             </td>
           ) : (

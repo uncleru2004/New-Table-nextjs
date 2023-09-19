@@ -1,20 +1,21 @@
 export const columns = [
-  { title: "ID", getVal: (obj) => obj.id },
+  { title: "ID", getVal: ({ id }) => id },
 
-  { title: "Name", getVal: (obj) => obj.name, setVal: (name) => ({ name }) },
+  { title: "Name", getVal: ({ name }) => name, setVal: (name) => ({ name }) },
   {
     title: "Email",
-    getVal: ({ email }) => <a href={"mailto:" + email}>{email}</a>,
+    getVal: ({ email }) => email,
+    setVal: (email) => ({ email }),
   },
   {
     title: "Address",
-    getVal: ({ address: { city, street, suite } }) =>
-      `${city}, ${street}, ${suite}`,
+    getVal: ({ address: { city } }) => city,
+    setVal: (city) => ({ address: { city } }),
   },
   {
     title: "Phone",
-    getVal: ({ phone }) => <a href={"tel:" + phone}>{phone}</a>,
-    
+    getVal: ({ phone }) => phone,
+    setVal: (phone) => ({ phone }),
   },
   {
     title: "del",

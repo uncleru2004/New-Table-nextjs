@@ -11,17 +11,21 @@ export default memo(function Table({ data, editedID, children }) {
       <table className={css.table}>
         <thead>
           <tr>
-            {columns.map(({ title }) => title !== 'del' && title !== 'ed' ? (
-              <th id={title} key={title}>
-                <button id="sortUp" className="btnSort">
-                  ▲
-                </button>
-                {title}
-                <button id="sortDown" className="btnSort">
-                  ▼
-                </button>
-              </th>
-            ) : false)}
+            {columns.map(({ title }) =>
+              title !== "del" && title !== "ed" ? (
+                <th id={title} key={title}>
+                  <button id="sortUp" className="btnSort">
+                    ▲
+                  </button>
+                  {title}
+                  <button id="sortDown" className="btnSort">
+                    ▼
+                  </button>
+                </th>
+              ) : (
+                false
+              )
+            )}
           </tr>
         </thead>
         <tbody>
@@ -30,7 +34,7 @@ export default memo(function Table({ data, editedID, children }) {
               {user.id == editedID ? (
                 <>{children}</>
               ) : (
-                <RenderUser user={user} />
+                <RenderUser user={user} key={user.id} />
               )}
             </>
           ))}
