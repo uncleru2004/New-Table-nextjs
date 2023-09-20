@@ -1,9 +1,9 @@
 import css from "./table.module.css";
 import RenderUser from "./RenderUser";
-import { memo } from "react";
+import { Fragment, memo } from "react";
 import { columns } from "./fetcher";
 
-export default memo(function Table({ data, editedID, children }) {
+export default function Table({ data, editedID, children }) {
   console.log("Table render");
   //console.log(editedID);
   if (data) {
@@ -30,17 +30,17 @@ export default memo(function Table({ data, editedID, children }) {
         </thead>
         <tbody>
           {data.map((user) => (
-            <>
+            <Fragment key={user.id}>
               {user.id == editedID ? (
                 <>{children}</>
               ) : (
-                <RenderUser user={user} key={user.id} />
+                <RenderUser user={user} />
               )}
-            </>
+            </Fragment>
           ))}
         </tbody>
         {!editedID && <tfoot>{children}</tfoot>}
       </table>
     );
   }
-});
+};

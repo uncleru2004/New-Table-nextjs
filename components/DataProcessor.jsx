@@ -1,10 +1,11 @@
-import { memo, useState } from "react";
+import { useState } from "react";
 import Table from "./Table";
 import { columns } from "./fetcher";
 import ItemsFetcher from "./ItemsFetcher";
 import RenderInfo from "./RenderInfo";
 import Dialog from "./Dialog";
 import RenderPosts from "./RenderPosts";
+import Form from "./Form";
 
 export default function DataProcessor() {
   //console.log("DataProcessor render");
@@ -16,10 +17,8 @@ export default function DataProcessor() {
     [openDialogUserID, setOpenDialogUserID] = useState(null),
     [openDialogPosts, setOpenDialogPosts] = useState(null),
     [editedID, setEditedID] = useState(null),
-    [values, setValues] = useState(columns.map(() => "-"));
-  console.log(values);
-  //console.log(data[+editedID])
-  console.log(editedID);
+    [values, setValues] = useState(columns.map(() => ""));
+
   function filterObjects(el) {
     if (!filterStr) return true;
     return columns
@@ -73,16 +72,14 @@ export default function DataProcessor() {
       setEditedID(tr.id);
       const index = data.findIndex((obj) => String(obj.id) === String(tr.id));
       setValues(
-        columns.map(({ setVal, getVal }) =>
-          setVal ? getVal(data[index]) : "-"
-        )
+        columns.map(({ setVal, getVal }) => (setVal ? getVal(data[index]) : ""))
       );
       setOpenDialogUserID(null);
       setOpenDialogPosts(null);
     }
     if (event.target.id === "cancel") {
       setEditedID(null);
-      setValues(columns.map(() => "-"));
+      setValues(columns.map(() => ""));
     }
     if (event.target.id === "ok") {
       if (editedID) {
@@ -105,39 +102,8 @@ export default function DataProcessor() {
         setData(data.concat(newObj));
       }
       setEditedID(null);
-      setValues(columns.map(() => "-"));
+      setValues(columns.map(() => ""));
     }
-  }
-
-  function Form() {
-    return (
-      <tr>
-        {columns.map(({ title, setVal }, index) =>
-          title === "del" ? (
-            <td key={title}>
-              <button id="ok">🆗</button>
-            </td>
-          ) : title === "ed" ? (
-            <td key={title}>
-              <button id="cancel">🗙</button>
-            </td>
-          ) : (
-            <td key={title}>
-              {setVal ? (
-                <input
-                  value={values[index]}
-                  onInput={(event) =>
-                    setValues((old) => old.with(index, event.target.value))
-                  }
-                />
-              ) : (
-                "..."
-              )}
-            </td>
-          )
-        )}
-      </tr>
-    );
   }
 
   return (
@@ -155,7 +121,7 @@ export default function DataProcessor() {
           columns={columns}
           editedID={editedID}
         >
-          <Form />
+          <Form columns={columns} values={values} setValues={setValues} />
         </Table>
       </ItemsFetcher>
 

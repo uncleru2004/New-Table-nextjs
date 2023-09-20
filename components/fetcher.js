@@ -8,7 +8,7 @@ export const columns = [
     setVal: (email) => ({ email }),
   },
   {
-    title: "Address",
+    title: "Address: city",
     getVal: ({ address: { city } }) => city,
     setVal: (city) => ({ address: { city } }),
   },
